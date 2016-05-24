@@ -2,6 +2,7 @@
 
 fs = require 'fs'
 util = require 'util'
+args = require('minimist')(process.argv.slice(2))
 {EventEmitter} = require 'events'
 
 global._ = require 'underscore'
@@ -11,7 +12,17 @@ global.JID = require('node-xmpp-core').JID
 global.ltx = XmppClient.ltx
 global.uuid = require './lib/uuid'
 
-config = require(process.cwd() + "/config")
+if !args.username
+  config = require(process.cwd() + "/config")
+else
+  config = {
+    username: args.username
+    password: args.password
+    host: 'realtime.inintca.com'
+    port: 5222
+    # ms interval to send whitespace to xmpp server
+    legacySSL: false
+  }
 
 global.logError = => @robot.logger.error arguments...
 global.log = => console.log arguments...
